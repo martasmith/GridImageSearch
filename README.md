@@ -34,8 +34,9 @@ original feature set: 30 hours spent in total
 **Notes:**
 
 * This is my initial submission to be graded. 
+* In this week's assignment, I implemented the ViewHolder design pattern, as it was suggested in last week's codereview
 * Most of my time was spent working on the plugging away on all the required features and improving the UI. Nothing was really difficult, just alltogether it took a long time to complete
 * The UI could still use some work, like making better scaling images in the gridview
 
 LICEcap demo:
-![LICEcapimage](https://github.com/martasmith/InstagramViewer/blob/master/codepath_week2_v1.gif)
+![LICEcapimage](https://github.com/martasmith/GridImageSearch/blob/master/codepath_week2_v1.gif)
