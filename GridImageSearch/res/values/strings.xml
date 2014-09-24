@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">GridImageSearch</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="search_prompt">Enter search query</string>
+    <string name="search_label">Search</string>
+    <string name="image_title">Image Title</string>
+    <string name="alt_image">Image Result</string>
+    <string name="title_activity_image_display">Full Image</string>
+    <string name="title_activity_filter_settings">Google Image Searcher</string>
+    <string name="tv_imagesize_label">Image Size</string>
+    <string-array name="imageSizeArr">
+        <item >small</item>
+        <item >medium</item>
+        <item >large</item>
+        <item >xlarge</item>
+    </string-array>
+    <string name="filter_settings_label">Advanced search options</string>
+    <string name="tv_colorfilter_label">Color Filter</string>
+    <string-array name="colorFilterArr">
+        <item >black</item>
+        <item >blue</item>
+        <item >brown</item>
+        <item >gray</item>
+        <item >green</item>
+        <item >orange</item>
+        <item >pink</item>
+        <item >purple</item>
+        <item >red</item>
+        <item >teal</item>
+        <item >white</item>
+        <item >yellow</item>
+    </string-array>
+    <string name="tv_imagetype_label">Image Type</string>
+        <string-array name="imageTypeArr">
+        <item >face</item>
+        <item >photo</item>
+        <item >clipart</item>
+        <item >lineart</item>
+    </string-array>
+        <string name="tv_sitefilter_label">Site Filter</string>
+        <string name="spinner_text_default">Default Text</string>
+        <string name="btn_save_label">Save</string>
+        <string name="fullsize_image_label">Full size image</string>
+
+</resources>

@@ -1,0 +1,35 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.codepath.gridimagesearch.activities.ImageDisplayActivity" >
+
+       <ImageView
+           android:id="@+id/ivFullImage"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_above="@+id/tvTitle"
+           android:layout_alignParentLeft="true"
+           android:adjustViewBounds="true"
+           android:contentDescription="@string/fullsize_image_label"
+           android:layout_marginTop="5dp"
+           android:gravity="center"
+		   android:layout_centerVertical="true"
+		   android:layout_centerHorizontal="true"
+           android:maxWidth="600dp"
+           android:scaleType="fitCenter"
+           android:src="@drawable/ic_launcher" />
+
+       <TextView
+           android:id="@+id/tvTitle"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_alignParentLeft="true"
+           android:layout_centerVertical="true"
+           android:layout_marginTop="5dp"
+           android:layout_marginLeft="5dp"
+           android:maxLines="3"
+           android:ellipsize="end"
+           android:text="@string/image_title" />
+
+</RelativeLayout>

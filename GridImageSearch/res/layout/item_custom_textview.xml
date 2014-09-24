@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/tvSpinnerItem"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center_vertical"
+        android:gravity="right|center_vertical"
+        android:orientation="horizontal"
+        android:paddingRight="15dp"
+        android:text="@string/spinner_text_default" >
+</TextView>
+
