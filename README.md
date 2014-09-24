@@ -3,9 +3,7 @@ GridImageSearch
 
 A Grid Image search using the Google Image API
 
-Time spent:
-
-original feature set: 30 hours spent in total
+Time spent: 30 hours spent in total
 
 **Completed user stories:**
 
