@@ -18,10 +18,10 @@ Time spent: 30 hours spent in total
 *Advanced:*
 
  - [x] Improve the user interface and experiment with image assets and/or styling and coloring
+ - [x] Robust error handling, check if internet is available, handle error cases, network failures
  
 *Advanced features not yet implemented:*
 
-- [ ] Robust error handling, check if internet is available, handle error cases, network failures
 - [ ] Use the ActionBar SearchView or custom layout as the query box instead of an EditText
 - [ ] User can share an image to their friends or email it to themselves
 - [ ] Replace Filter Settings Activity with a lightweight modal overlay
