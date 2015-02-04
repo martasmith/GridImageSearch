@@ -1,18 +1,18 @@
+
 package com.codepath.gridimagesearch.activities;
 
 import java.util.ArrayList;
+
 import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.codepath.gridimagesearch.R;
-import com.codepath.gridimagesearch.adapters.EndlessScrollListener;
-import com.codepath.gridimagesearch.adapters.ImageResultsAdapter;
-import com.codepath.gridimagesearch.models.ImageResult;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
+
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -22,157 +22,217 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.SearchView;
+import android.widget.SearchView.OnQueryTextListener;
 import android.widget.Toast;
 
+import com.codepath.gridimagesearch.R;
+import com.codepath.gridimagesearch.adapters.EndlessScrollListener;
+import com.codepath.gridimagesearch.adapters.ImageResultsAdapter;
+import com.codepath.gridimagesearch.models.ImageResult;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
 public class SearchActivity extends Activity {
-	private EditText etQuery;
-	private GridView gvResults;
-	private ArrayList<ImageResult> imageResults;
-	private ImageResultsAdapter aImageResults;
-	private final int REQUEST_CODE = 10;
-	private String searchFilters,imageSizeValue,colorFilterValue,imageTypeValue,siteFilterValue;
-	
+    private EditText etQuery;
+    private GridView gvResults;
+    private ArrayList<ImageResult> imageResults;
+    private ImageResultsAdapter aImageResults;
+    private final int REQUEST_CODE = 10;
+    private String searchFilters, imageSizeValue, colorFilterValue, imageTypeValue,
+    siteFilterValue;
+    private SearchView searchView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         setupViews();
         searchFilters = "";
-        //creates the data source
+        // creates the data source
         imageResults = new ArrayList<ImageResult>();
-        //attaches the data source to an adapter
+        // attaches the data source to an adapter
         aImageResults = new ImageResultsAdapter(this, imageResults);
-        //link the adapter to the adapterview (gridview)
+        // link the adapter to the adapterview (gridview)
         gvResults.setAdapter(aImageResults);
     }
-    
-    private void setupViews() {
-    	etQuery = (EditText) findViewById(R.id.etQuery);
-    	gvResults = (GridView) findViewById(R.id.gvResults);
-    	gvResults.setOnItemClickListener(new OnItemClickListener() {
 
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				//launch the image display activity
-				//create an intent
-				Intent i = new Intent(SearchActivity.this, ImageDisplayActivity.class);
-				//get the image result to display
-				ImageResult currentRes = imageResults.get(position);
-				//pass image result to the intent
-				// in order to pass an entire object via an intent, our model must be serializable or parcelable
-				i.putExtra("result", currentRes);
-				//launch the new activity
-				startActivity(i);
-			}	
-    	});
-    	
-    	// set up scrolling mechanism
-    	gvResults.setOnScrollListener(new EndlessScrollListener() {
-			
-			@Override
-			public void onLoadMore(int page, int totalItemsCount) {
-				customLoadMoreDataFromApi(totalItemsCount);
-			}
-		});
-    	
+    private void setupViews() {
+        etQuery = (EditText) findViewById(R.id.etQuery);
+        gvResults = (GridView) findViewById(R.id.gvResults);
+        gvResults.setOnItemClickListener(new OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // launch the image display activity
+                // create an intent
+                Intent i = new Intent(SearchActivity.this, ImageDisplayActivity.class);
+                // get the image result to display
+                ImageResult currentRes = imageResults.get(position);
+                // pass image result to the intent
+                // in order to pass an entire object via an intent, our model must be serializable
+                // or parcelable
+                i.putExtra("result", currentRes);
+                // launch the new activity
+                startActivity(i);
+            }
+        });
+
+        // set up scrolling mechanism
+        gvResults.setOnScrollListener(new EndlessScrollListener() {
+
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                customLoadMoreDataFromApi(totalItemsCount);
+            }
+        });
+
     }
-    
-	protected void customLoadMoreDataFromApi(int offset) {
-	   	String query = etQuery.getText().toString();
-	   	AsyncHttpClient client = new AsyncHttpClient();
-        String searchUrl = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + 
-        		query + 
-        		"&rsz=8" + 
-        		"&start=" + offset +
-        		searchFilters;
+
+    // Check if there is network connectivity
+    private Boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+    }
+
+    protected void customLoadMoreDataFromApi(int offset) {
+
+        if (!isNetworkAvailable()) {
+            Toast.makeText(this, "The internet is currently unavailable. Please try again later!",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        String query = etQuery.getText().toString();
+        AsyncHttpClient client = new AsyncHttpClient();
+        String searchUrl = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" +
+                query +
+                "&rsz=8" +
+                "&start=" + offset +
+                searchFilters;
         Log.d("DEBUG", "query: " + searchUrl);
         client.get(searchUrl, new JsonHttpResponseHandler() {
-       	 @Override
-       	public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-       		//JSONArray imageResultsJson = null;
-       		try {
-       			Object responseData = response.getJSONObject("responseData");
-       			if (responseData != JSONObject.NULL)
-       			{
-       				JSONArray imageResultsJson = response.getJSONObject("responseData").getJSONArray("results");
-           			if (imageResultsJson.length() == 0) {
-           				Toast.makeText(getBaseContext(), "Your Search returned no results. Please try a different search term!", Toast.LENGTH_LONG).show();
-           			}
-           			// when changing the adapter, it modifies the underlying data
-           			aImageResults.addAll(ImageResult.fromJSONArray(imageResultsJson));
-       			}
-       			
-       		} catch (JSONException e) {
-       			e.printStackTrace();
-       		}
-       		//Log.i("INFO",imageResults.toString());
-       	}
-       	 
-       	@Override
-       		public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
-       			Log.d("ERROR", e.toString());
-       		} 
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                // JSONArray imageResultsJson = null;
+                try {
+                    Object responseData = response.getJSONObject("responseData");
+                    if (responseData != JSONObject.NULL)
+                    {
+                        JSONArray imageResultsJson = response.getJSONObject("responseData")
+                                .getJSONArray("results");
+                        if (imageResultsJson.length() == 0) {
+                            Toast.makeText(
+                                    getBaseContext(),
+                                    "Your Search returned no results. Please try a different search term!",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                        // when changing the adapter, it modifies the underlying data
+                        aImageResults.addAll(ImageResult.fromJSONArray(imageResultsJson));
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                // Log.i("INFO",imageResults.toString());
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                    JSONObject errorResponse) {
+                Toast.makeText(SearchActivity.this,
+                        "Uable to connect to the internet", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString,
+                    Throwable e) {
+                Toast.makeText(SearchActivity.this,
+                        "Uable to fetch search results from Google API", Toast.LENGTH_LONG).show();
+                Log.d("ERROR", e.toString());
+            }
         });
-		
-	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
-			// clear out filters to be regenerated
-			searchFilters = "";
-	        // check if intent results are passed back and collect data
-	        // Retrieve data Strings from Intent
-	        Bundle extras = data.getExtras();
-	        if (extras != null) {
-	        	if (extras.containsKey("imageSizeValue") && (extras.getString("imageSizeValue") != "")) {
-	        		imageSizeValue = extras.getString("imageSizeValue");
-	        		searchFilters += "&imgsz="+imageSizeValue;
-	        	}
-	        	if (extras.containsKey("colorFilterValue") && (extras.getString("colorFilterValue") != "")) {
-	        		colorFilterValue = extras.getString("colorFilterValue");
-	        		searchFilters += "&imgcolor="+colorFilterValue;
-	        	}
-	        	if (extras.containsKey("imageTypeValue") && (extras.getString("imageTypeValue") != "")) {
-	        		imageTypeValue = extras.getString("imageTypeValue");
-	        		searchFilters += "&imgtype="+imageTypeValue;
-	        	}
-	        	if (extras.containsKey("siteFilterValue") && (extras.getString("sizeFilterValue") != "")) {
-	        		siteFilterValue = extras.getString("siteFilterValue");
-	        			searchFilters += "&as_sitesearch="+siteFilterValue;
-	        	}
-	        } 
-		}
-		
-	}
-     
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            // clear out filters to be regenerated
+            searchFilters = "";
+            // check if intent results are passed back and collect data
+            // Retrieve data Strings from Intent
+            Bundle extras = data.getExtras();
+            if (extras != null) {
+                if (extras.containsKey("imageSizeValue")
+                        && (extras.getString("imageSizeValue") != "")) {
+                    imageSizeValue = extras.getString("imageSizeValue");
+                    searchFilters += "&imgsz=" + imageSizeValue;
+                }
+                if (extras.containsKey("colorFilterValue")
+                        && (extras.getString("colorFilterValue") != "")) {
+                    colorFilterValue = extras.getString("colorFilterValue");
+                    searchFilters += "&imgcolor=" + colorFilterValue;
+                }
+                if (extras.containsKey("imageTypeValue")
+                        && (extras.getString("imageTypeValue") != "")) {
+                    imageTypeValue = extras.getString("imageTypeValue");
+                    searchFilters += "&imgtype=" + imageTypeValue;
+                }
+                if (extras.containsKey("siteFilterValue")
+                        && (extras.getString("sizeFilterValue") != "")) {
+                    siteFilterValue = extras.getString("siteFilterValue");
+                    searchFilters += "&as_sitesearch=" + siteFilterValue;
+                }
+            }
+        }
+
+    }
+
     public void onImageSearch(View v) {
-    	aImageResults.clear();
-    	customLoadMoreDataFromApi(0);
-      
-    }
-    
-    public void onSettings(MenuItem mi) {
-    	//We need to start an intent for result, pass search query + filter options
-    	Intent i = new Intent(SearchActivity.this, FilterSettingsActivity.class);
-    	//get the search query from the edit text
-    	i.putExtra("imageSizeValue", imageSizeValue);
-    	i.putExtra("colorFilterValue", colorFilterValue);
-    	i.putExtra("imageTypeValue", imageTypeValue);
-    	i.putExtra("siteFilterValue", siteFilterValue);
-    	//send filter settings back to the filter page
-    	startActivityForResult(i,REQUEST_CODE);	
+        aImageResults.clear();
+        customLoadMoreDataFromApi(0);
+
     }
 
+    public void onSettings(MenuItem mi) {
+        // We need to start an intent for result, pass search query + filter options
+        Intent i = new Intent(SearchActivity.this, FilterSettingsActivity.class);
+        // get the search query from the edit text
+        i.putExtra("imageSizeValue", imageSizeValue);
+        i.putExtra("colorFilterValue", colorFilterValue);
+        i.putExtra("imageTypeValue", imageTypeValue);
+        i.putExtra("siteFilterValue", siteFilterValue);
+        // send filter settings back to the filter page
+        startActivityForResult(i, REQUEST_CODE);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.search, menu);
-        return true;
+        MenuItem searchItem = menu.findItem(R.id.miSearch);
+        searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(new OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // perform query here
+                Toast.makeText(SearchActivity.this, "testing future search", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
+
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will

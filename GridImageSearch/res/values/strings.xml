@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">GridImageSearch</string>
+    <string name="app_name">Image Searcher</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="search_prompt">Enter search query</string>
@@ -9,7 +9,7 @@
     <string name="image_title">Image Title</string>
     <string name="alt_image">Image Result</string>
     <string name="title_activity_image_display">Full Image</string>
-    <string name="title_activity_filter_settings">Google Image Searcher</string>
+    <string name="title_activity_filter_settings">Image Searcher</string>
     <string name="tv_imagesize_label">Image Size</string>
 
     <string-array name="imageSizeArr">

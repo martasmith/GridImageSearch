@@ -2,8 +2,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.codepath.gridimagesearch.SearchActivity" >
     
+  <item android:id="@+id/miSearch"
+          android:orderInCategory="5"
+          android:title="@string/search_label"
+          android:icon="@drawable/ic_action_search"
+          android:showAsAction="ifRoom|collapseActionView"
+          android:actionViewClass="android.widget.SearchView" />
+    
     <item
         android:id="@+id/miSettings"
+         android:orderInCategory="6"
         android:icon="@drawable/ic_action_settings_light"
         android:onClick="onSettings"
         android:showAsAction="ifRoom"
