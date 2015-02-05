@@ -19,10 +19,10 @@ Time spent: 30 hours spent in total
 
  - [x] Improve the user interface and experiment with image assets and/or styling and coloring
  - [x] Robust error handling, check if internet is available, handle error cases, network failures
+ - [x] Use the ActionBar SearchView or custom layout as the query box instead of an EditText
  
 *Advanced features not yet implemented:*
 
-- [ ] Use the ActionBar SearchView or custom layout as the query box instead of an EditText
 - [ ] User can share an image to their friends or email it to themselves
 - [ ] Replace Filter Settings Activity with a lightweight modal overlay
 - [ ] Use the StaggeredGridView to display improve the grid of image results
@@ -36,5 +36,10 @@ Time spent: 30 hours spent in total
 * Most of my time was spent working on the plugging away on all the required features and improving the UI. Nothing was really difficult, just alltogether it took a long time to complete
 * The UI could still use some work, like making better scaling images in the gridview
 
-LICEcap demo:
+**Screenshot of current features :**
+
+![Screenshot](https://github.com/martasmith/InstagramViewer/blob/master/imgSearch_screen.png)
+
+**Demo:**
+
 ![LICEcapimage](https://github.com/martasmith/GridImageSearch/blob/master/codepath_week2_v1.gif)
