@@ -38,7 +38,7 @@ Time spent: 30 hours spent in total
 
 **Screenshot of current features :**
 
-![Screenshot](https://github.com/martasmith/InstagramViewer/blob/master/imgSearch_screen.png)
+![Screenshot](https://github.com/martasmith/GridImageSearch/blob/master/imgSearch_screen.png)
 
 **Demo:**
 
