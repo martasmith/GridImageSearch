@@ -20,7 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
@@ -34,13 +33,12 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 public class SearchActivity extends Activity {
-    private EditText etQuery;
     private GridView gvResults;
     private ArrayList<ImageResult> imageResults;
     private ImageResultsAdapter aImageResults;
     private final int REQUEST_CODE = 10;
     private String searchFilters, imageSizeValue, colorFilterValue, imageTypeValue,
-    siteFilterValue;
+    siteFilterValue, searchStr;
     private SearchView searchView;
 
     @Override
@@ -58,7 +56,6 @@ public class SearchActivity extends Activity {
     }
 
     private void setupViews() {
-        etQuery = (EditText) findViewById(R.id.etQuery);
         gvResults = (GridView) findViewById(R.id.gvResults);
         gvResults.setOnItemClickListener(new OnItemClickListener() {
 
@@ -104,14 +101,13 @@ public class SearchActivity extends Activity {
             return;
         }
 
-        String query = etQuery.getText().toString();
         AsyncHttpClient client = new AsyncHttpClient();
         String searchUrl = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" +
-                query +
+                searchStr +
                 "&rsz=8" +
                 "&start=" + offset +
                 searchFilters;
-        Log.d("DEBUG", "query: " + searchUrl);
+        Log.d("martas", "query: " + searchUrl);
         client.get(searchUrl, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -191,7 +187,7 @@ public class SearchActivity extends Activity {
 
     }
 
-    public void onImageSearch(View v) {
+    public void doImageSearch() {
         aImageResults.clear();
         customLoadMoreDataFromApi(0);
 
@@ -219,7 +215,8 @@ public class SearchActivity extends Activity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // perform query here
-                Toast.makeText(SearchActivity.this, "testing future search", Toast.LENGTH_SHORT).show();
+                searchStr = query;
+                doImageSearch();
                 return true;
             }
 
