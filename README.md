@@ -35,6 +35,10 @@ Time spent: 30 hours spent in total
 * In this week's assignment, I implemented the ViewHolder design pattern, as it was suggested in last week's codereview
 * Most of my time was spent working on the plugging away on all the required features and improving the UI. Nothing was really difficult, just alltogether it took a long time to complete
 * The UI could still use some work, like making better scaling images in the gridview
+* 
+**Screenshot of launch display :**
+
+![Screenshot](https://github.com/martasmith/GridImageSearch/blob/master/imgSearch_home.png)
 
 **Screenshot of current features :**
 
