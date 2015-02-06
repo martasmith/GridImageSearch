@@ -63,7 +63,6 @@ public class FilterSettingsActivity extends Activity {
                 siteFilterValue = extras.getString("siteFilterValue");
                 tvSiteFilter.setText(siteFilterValue);
             }
-
         }
     }
 
