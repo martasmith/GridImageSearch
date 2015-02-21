@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/panel_content"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="horizontal" >
 
-    <ImageView
+    <com.etsy.android.grid.util.DynamicHeightImageView
         android:id="@+id/ivImage"
         android:layout_width="match_parent"
-        android:layout_height="130dp"
+        android:layout_height="match_parent"
         android:adjustViewBounds="true"
         android:contentDescription="@string/alt_image"
-        android:scaleType="fitCenter"
-        android:padding="1dp"
-        android:src="@drawable/ic_launcher" />
+        android:scaleType="centerCrop" />
 
-</LinearLayout>
+</FrameLayout>

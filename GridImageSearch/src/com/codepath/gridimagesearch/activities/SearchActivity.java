@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -17,10 +18,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MenuItem.OnActionExpandListener;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.GridView;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.Toast;
@@ -29,23 +31,29 @@ import com.codepath.gridimagesearch.R;
 import com.codepath.gridimagesearch.adapters.EndlessScrollListener;
 import com.codepath.gridimagesearch.adapters.ImageResultsAdapter;
 import com.codepath.gridimagesearch.models.ImageResult;
+import com.etsy.android.grid.StaggeredGridView;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 public class SearchActivity extends Activity {
-    private GridView gvResults;
+    //private GridView gvResults;
     private ArrayList<ImageResult> imageResults;
     private ImageResultsAdapter aImageResults;
     private final int REQUEST_CODE = 10;
     private String searchFilters, imageSizeValue, colorFilterValue, imageTypeValue,
     siteFilterValue, searchStr;
     private SearchView searchView;
+    private StaggeredGridView gvResults;
+    private RelativeLayout rlSplashScreen;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         setupViews();
+
+        //getWindow().getDecorView().setBackgroundResource(R.drawable.srch_background);
         searchFilters = "";
         // creates the data source
         imageResults = new ArrayList<ImageResult>();
@@ -56,7 +64,10 @@ public class SearchActivity extends Activity {
     }
 
     private void setupViews() {
-        gvResults = (GridView) findViewById(R.id.gvResults);
+        rlSplashScreen = (RelativeLayout) findViewById(R.id.rlSplashScreen);
+        gvResults = (StaggeredGridView) findViewById(R.id.gvResults);
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
         gvResults.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
@@ -108,15 +119,18 @@ public class SearchActivity extends Activity {
                 "&start=" + offset +
                 searchFilters;
         Log.d("martas", "query: " + searchUrl);
+
         client.get(searchUrl, new JsonHttpResponseHandler() {
+
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                // JSONArray imageResultsJson = null;
+                JSONArray imageResultsJson = null;
+
+
                 try {
-                    Object responseData = response.getJSONObject("responseData");
-                    if (responseData != JSONObject.NULL)
-                    {
-                        JSONArray imageResultsJson = response.getJSONObject("responseData")
+
+                    if (!response.isNull("responseData")) {
+                        imageResultsJson = response.getJSONObject("responseData")
                                 .getJSONArray("results");
                         if (imageResultsJson.length() == 0) {
                             Toast.makeText(
@@ -189,9 +203,22 @@ public class SearchActivity extends Activity {
 
     public void doImageSearch() {
         aImageResults.clear();
+        switchSplashScreenOff(true);
         customLoadMoreDataFromApi(0);
 
     }
+
+    public void switchSplashScreenOff(boolean switchFlag) {
+        if (switchFlag) {
+            rlSplashScreen.setVisibility(View.GONE);
+            gvResults.setVisibility(View.VISIBLE);
+        } else {
+            rlSplashScreen.setVisibility(View.VISIBLE);
+            gvResults.setVisibility(View.GONE);
+        }
+
+    }
+
 
     public void onSettings(MenuItem mi) {
         // We need to start an intent for result, pass search query + filter options
@@ -211,6 +238,23 @@ public class SearchActivity extends Activity {
         getMenuInflater().inflate(R.menu.search, menu);
         MenuItem searchItem = menu.findItem(R.id.miSearch);
         searchView = (SearchView) searchItem.getActionView();
+
+        searchItem.setOnActionExpandListener(new OnActionExpandListener() {
+
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                // TODO Auto-generated method stub
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                // TODO Auto-generated method stub
+                switchSplashScreenOff(false);
+                return true;
+            }
+        });
+
         searchView.setOnQueryTextListener(new OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -219,6 +263,8 @@ public class SearchActivity extends Activity {
                 doImageSearch();
                 return true;
             }
+
+
 
             @Override
             public boolean onQueryTextChange(String newText) {
@@ -235,10 +281,16 @@ public class SearchActivity extends Activity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                return true;
+            case R.id.action_settings:
+                return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
+
+
 }

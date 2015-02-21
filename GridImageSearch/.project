@@ -3,6 +3,7 @@
 	<name>GridImageSearch</name>
 	<comment></comment>
 	<projects>
+		<project>Stocard-StaggereGridViewLibrary</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
