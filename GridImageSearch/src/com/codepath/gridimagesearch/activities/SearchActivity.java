@@ -197,16 +197,22 @@ public class SearchActivity extends Activity {
                     searchFilters += "&as_sitesearch=" + siteFilterValue;
                 }
             }
+
+            doImageSearch();
         }
 
     }
 
     public void doImageSearch() {
         aImageResults.clear();
-        switchSplashScreenOff(true);
+        if (rlSplashScreen.getVisibility() == View.VISIBLE) {
+            switchSplashScreenOff(true);
+        }
         customLoadMoreDataFromApi(0);
 
     }
+
+
 
     public void switchSplashScreenOff(boolean switchFlag) {
         if (switchFlag) {
@@ -218,7 +224,6 @@ public class SearchActivity extends Activity {
         }
 
     }
-
 
     public void onSettings(MenuItem mi) {
         // We need to start an intent for result, pass search query + filter options
@@ -250,10 +255,13 @@ public class SearchActivity extends Activity {
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 // TODO Auto-generated method stub
-                switchSplashScreenOff(false);
+                if (rlSplashScreen.getVisibility() != View.VISIBLE) {
+                    switchSplashScreenOff(false);
+                }
                 return true;
             }
         });
+
 
         searchView.setOnQueryTextListener(new OnQueryTextListener() {
             @Override

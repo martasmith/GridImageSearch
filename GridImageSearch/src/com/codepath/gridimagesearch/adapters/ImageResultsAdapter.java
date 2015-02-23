@@ -3,6 +3,7 @@ package com.codepath.gridimagesearch.adapters;
 import java.util.List;
 
 import android.content.Context;
+import android.text.Html;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.ArrayAdapter;
 import com.codepath.gridimagesearch.R;
 import com.codepath.gridimagesearch.models.ImageResult;
 import com.etsy.android.grid.util.DynamicHeightImageView;
+import com.etsy.android.grid.util.DynamicHeightTextView;
 import com.squareup.picasso.Picasso;
 
 public class ImageResultsAdapter extends ArrayAdapter<ImageResult> {
@@ -25,6 +27,7 @@ public class ImageResultsAdapter extends ArrayAdapter<ImageResult> {
     // viewholder class
     private static class ViewHolder {
         DynamicHeightImageView ivImage;
+        DynamicHeightTextView tvTitle;
     }
 
     @Override
@@ -37,11 +40,14 @@ public class ImageResultsAdapter extends ArrayAdapter<ImageResult> {
             viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_image_result, parent, false);
             viewHolder.ivImage = (DynamicHeightImageView) convertView.findViewById(R.id.ivImage);
+            viewHolder.tvTitle = (DynamicHeightTextView) convertView.findViewById(R.id.tvTitle);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
+        // populate text
+        viewHolder.tvTitle.setText(Html.fromHtml(currentImage.title));
         //clear out the image
         viewHolder.ivImage.setImageResource(0);
 
@@ -49,7 +55,10 @@ public class ImageResultsAdapter extends ArrayAdapter<ImageResult> {
         viewHolder.ivImage.setHeightRatio(positionHeight);
 
         //remotely download the image data in the background with Picasso
-        Picasso.with(getContext()).load(currentImage.thumbUrl).into(viewHolder.ivImage);
+        Picasso.with(getContext())
+        .load(currentImage.thumbUrl)
+        .placeholder(R.drawable.ic_thumb_placeholder)
+        .into(viewHolder.ivImage);
 
 
         //return the completed view to be displayed

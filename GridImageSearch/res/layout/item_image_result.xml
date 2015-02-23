@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/panel_content"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:descendantFocusability="blocksDescendants"
-    android:orientation="horizontal" >
+    android:orientation="vertical" >
 
     <com.etsy.android.grid.util.DynamicHeightImageView
         android:id="@+id/ivImage"
@@ -13,5 +13,17 @@
         android:adjustViewBounds="true"
         android:contentDescription="@string/alt_image"
         android:scaleType="centerCrop" />
+    
+    <com.etsy.android.grid.util.DynamicHeightTextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/imgsearch_title_background"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:paddingLeft="2dp"
+        android:text="@string/default_title_text"
+        android:textColor="@color/imgsearch_title_text"
+        android:textSize="12sp" />
 
-</FrameLayout>
+</LinearLayout>

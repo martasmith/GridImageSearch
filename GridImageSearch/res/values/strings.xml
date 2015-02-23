@@ -54,5 +54,7 @@
     <string name="btn_save_label">Save</string>
     <string name="fullsize_image_label">Full size image</string>
     <string name="btnReset">Reset</string>
+    <string name="default_title_text">Default image text</string>
+    <string name="background_image">Background Image</string>
 
 </resources>
