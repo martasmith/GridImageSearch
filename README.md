@@ -21,16 +21,13 @@ Time spent: 30 hours spent in total
  - [x] Robust error handling, check if internet is available, handle error cases, network failures
  - [x] Use the ActionBar SearchView or custom layout as the query box instead of an EditText
  - [x] Use the StaggeredGridView to display improve the grid of image results
- 
-*Advanced features not yet implemented:*
-
-- [ ] User can share an image to their friends or email it to themselves
-- [ ] Replace Filter Settings Activity with a lightweight modal overlay
-- [ ] User can zoom or pan images displayed in full-screen detail view
+ - [ ] User can share an image to their friends or email it to themselves
+ - [ ] Replace Filter Settings Activity with a lightweight modal overlay
+ - [ ] User can zoom or pan images displayed in full-screen detail view
 
 *Additional improvements not yet implemented:*
 
-- [ ] Display placeholder for images while loading
+- [x] Display placeholder for images while loading
 - [ ] Display default image with error message if image detail does not load
 - [ ] Diplay loading indicator
 
