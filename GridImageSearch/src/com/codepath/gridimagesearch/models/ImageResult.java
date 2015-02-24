@@ -14,6 +14,7 @@ public class ImageResult implements Serializable {
     public double thumbHeight;
     public String thumbUrl;
     public String title;
+    public String visibleUrl;
 
     // for raw item json
     public ImageResult(JSONObject json) {
@@ -38,6 +39,12 @@ public class ImageResult implements Serializable {
             if (json.optString("tbHeight") != null)
             {
                 this.thumbHeight = json.getDouble("tbHeight");
+            }
+            if (json.optString("contentNoFormatting") != null)
+            {
+                this.visibleUrl = json.getString("visibleUrl");
+            } else {
+                this.visibleUrl = "Image Detail";
             }
         } catch (JSONException e) {
             e.printStackTrace();

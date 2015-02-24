@@ -3,9 +3,10 @@
     tools:context="com.codepath.gridimagesearch.ImageDisplayActivity" >
 
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:showAsAction="never"
+        android:id="@+id/action_share"
+        android:orderInCategory="10"
+        android:showAsAction="always"
+        android:actionProviderClass="android.widget.ShareActionProvider" 
         android:title="@string/action_settings"/>
 
 </menu>

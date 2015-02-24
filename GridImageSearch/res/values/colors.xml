@@ -2,6 +2,7 @@
 <resources>
 
     <color name="imgsearch_actionbar">#d45656</color>
+    <color name="imgsearch_page_packground">#c0d6e4</color>
     <color name="imgsearch_title_background">#f5f5dc</color>
     <color name="imgsearch_title_text">#003366</color>
 </resources>
