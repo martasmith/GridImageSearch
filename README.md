@@ -21,14 +21,14 @@ Time spent: 30 hours spent in total
  - [x] Robust error handling, check if internet is available, handle error cases, network failures
  - [x] Use the ActionBar SearchView or custom layout as the query box instead of an EditText
  - [x] Use the StaggeredGridView to display improve the grid of image results
- - [ ] User can share an image to their friends or email it to themselves
+ - [x] User can share an image to their friends or email it to themselves
  - [ ] Replace Filter Settings Activity with a lightweight modal overlay
  - [ ] User can zoom or pan images displayed in full-screen detail view
 
 *Additional improvements not yet implemented:*
 
 - [x] Display placeholder for images while loading
-- [ ] Display default image with error message if image detail does not load
+- [x] Display default image with error message if image detail does not load
 - [ ] Diplay loading indicator
 
 **Notes:**
@@ -42,9 +42,13 @@ Time spent: 30 hours spent in total
 
 ![Screenshot](https://github.com/martasmith/GridImageSearch/blob/master/imgSearch_home.png)
 
-**Screenshot of current features :**
+**Screenshot of search screen :**
 
 ![Screenshot](https://github.com/martasmith/GridImageSearch/blob/master/imgSearch_screen.png)
+
+**Screenshot of image detail screen :**
+
+![Screenshot](https://github.com/martasmith/GridImageSearch/blob/master/imgSearch_detail.png)
 
 **Demo:**
 
