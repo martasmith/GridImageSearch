@@ -25,7 +25,7 @@ Time spent: 30 hours spent in total
  - [ ] Replace Filter Settings Activity with a lightweight modal overlay
  - [ ] User can zoom or pan images displayed in full-screen detail view
 
-*Additional improvements not yet implemented:*
+*Additional improvements:*
 
 - [x] Display placeholder for images while loading
 - [x] Display default image with error message if image detail does not load
