@@ -5,4 +5,13 @@
     <color name="imgsearch_page_packground">#c0d6e4</color>
     <color name="imgsearch_title_background">#f5f5dc</color>
     <color name="imgsearch_title_text">#003366</color>
+    <color name="imgsearch_light_red">#ff6f69</color>
+    <color name="imgsearch_dark_red">#d45656</color>
+    <color name="imgsearch_orange1">#f09537</color>
+    <color name="imgsearch_orange2">#f48020</color>
+    <color name="imgsearch_blue1">#b6d3e6</color>
+    <color name="imgsearch_blue2">#86b6d6</color>
+    <color name="imgsearch_btn_light_stroke">#f09537</color>
+    <color name="imgsearch_btn_dark_stroke">#f48020</color>
+  
 </resources>

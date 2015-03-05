@@ -9,12 +9,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ActionBar;
-import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,13 +32,15 @@ import android.widget.Toast;
 import com.codepath.gridimagesearch.R;
 import com.codepath.gridimagesearch.adapters.EndlessScrollListener;
 import com.codepath.gridimagesearch.adapters.ImageResultsAdapter;
+import com.codepath.gridimagesearch.fragments.FilterSettingsFragment;
+import com.codepath.gridimagesearch.fragments.FilterSettingsFragment.OnFilterSettingsFragmentListener;
 import com.codepath.gridimagesearch.models.ImageResult;
 import com.etsy.android.grid.StaggeredGridView;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
-public class SearchActivity extends Activity {
-    //private GridView gvResults;
+public class SearchActivity extends FragmentActivity implements OnFilterSettingsFragmentListener {
+    // private GridView gvResults;
     private ArrayList<ImageResult> imageResults;
     private ImageResultsAdapter aImageResults;
     private final int REQUEST_CODE = 10;
@@ -46,15 +50,13 @@ public class SearchActivity extends Activity {
     private StaggeredGridView gvResults;
     private RelativeLayout rlSplashScreen;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         setupViews();
 
-        //getWindow().getDecorView().setBackgroundResource(R.drawable.srch_background);
-        searchFilters = "";
+        // getWindow().getDecorView().setBackgroundResource(R.drawable.srch_background);
         // creates the data source
         imageResults = new ArrayList<ImageResult>();
         // attaches the data source to an adapter
@@ -112,7 +114,16 @@ public class SearchActivity extends Activity {
             return;
         }
 
+        if (searchStr == null) {
+            Toast.makeText(getApplicationContext(), "Please enter a search term", Toast.LENGTH_LONG)
+            .show();
+            return;
+        }
+
         AsyncHttpClient client = new AsyncHttpClient();
+
+        searchFilters = getSearchFilters();
+
         String searchUrl = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" +
                 searchStr +
                 "&rsz=8" +
@@ -125,8 +136,6 @@ public class SearchActivity extends Activity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 JSONArray imageResultsJson = null;
-
-
                 try {
 
                     if (!response.isNull("responseData")) {
@@ -163,7 +172,6 @@ public class SearchActivity extends Activity {
                 Log.d("ERROR", e.toString());
             }
         });
-
     }
 
     @Override
@@ -197,10 +205,8 @@ public class SearchActivity extends Activity {
                     searchFilters += "&as_sitesearch=" + siteFilterValue;
                 }
             }
-
             doImageSearch();
         }
-
     }
 
     public void doImageSearch() {
@@ -209,10 +215,7 @@ public class SearchActivity extends Activity {
             switchSplashScreenOff(true);
         }
         customLoadMoreDataFromApi(0);
-
     }
-
-
 
     public void switchSplashScreenOff(boolean switchFlag) {
         if (switchFlag) {
@@ -222,19 +225,43 @@ public class SearchActivity extends Activity {
             rlSplashScreen.setVisibility(View.VISIBLE);
             gvResults.setVisibility(View.GONE);
         }
+    }
 
+    private String getSearchFilters() {
+        searchFilters = "";
+        if (!TextUtils.isEmpty(imageSizeValue)) {
+            searchFilters += "&imgsz=" + imageSizeValue;
+        }
+        if (!TextUtils.isEmpty(colorFilterValue)) {
+            searchFilters += "&imgcolor=" + colorFilterValue;
+        }
+        if (!TextUtils.isEmpty(imageTypeValue)) {
+            searchFilters += "&imgtype=" + imageTypeValue;
+        }
+        if (!TextUtils.isEmpty(siteFilterValue)) {
+            searchFilters += "&as_sitesearch=" + siteFilterValue;
+        }
+        return searchFilters;
+    }
+
+    private void showFilterSettings() {
+        FragmentManager fm = getFragmentManager();
+        FilterSettingsFragment fragment = FilterSettingsFragment.newInstance(imageSizeValue,
+                colorFilterValue, imageTypeValue, siteFilterValue);
+        fragment.show(fm, "Filter_Settings_fragment");
     }
 
     public void onSettings(MenuItem mi) {
-        // We need to start an intent for result, pass search query + filter options
-        Intent i = new Intent(SearchActivity.this, FilterSettingsActivity.class);
-        // get the search query from the edit text
-        i.putExtra("imageSizeValue", imageSizeValue);
-        i.putExtra("colorFilterValue", colorFilterValue);
-        i.putExtra("imageTypeValue", imageTypeValue);
-        i.putExtra("siteFilterValue", siteFilterValue);
-        // send filter settings back to the filter page
-        startActivityForResult(i, REQUEST_CODE);
+        showFilterSettings();
+    }
+
+    @Override
+    public void OnFilterSet(String imgSize, String colorFilter, String imgType, String siteFilter) {
+        imageSizeValue = imgSize;
+        colorFilterValue = colorFilter;
+        imageTypeValue = imgType;
+        siteFilterValue = siteFilter;
+        doImageSearch();
     }
 
     @Override
@@ -262,7 +289,6 @@ public class SearchActivity extends Activity {
             }
         });
 
-
         searchView.setOnQueryTextListener(new OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -271,8 +297,6 @@ public class SearchActivity extends Activity {
                 doImageSearch();
                 return true;
             }
-
-
 
             @Override
             public boolean onQueryTextChange(String newText) {
@@ -293,12 +317,9 @@ public class SearchActivity extends Activity {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
                 return true;
-            case R.id.action_settings:
-                return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
-
 
 }

@@ -6,24 +6,15 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/imgsearch_page_packground"
     tools:context="com.codepath.gridimagesearch.activities.FilterSettingsActivity" >
     
-    <TextView
-        android:id="@+id/tvMainLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:text="@string/filter_settings_label"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
     
    <TextView
         android:id="@+id/tvImageSize"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/sprImageSize"
-        android:layout_alignLeft="@+id/tvMainLabel"
         android:text="@string/tv_imagesize_label" />
 
     <Spinner
@@ -34,10 +25,9 @@
         android:layout_alignParentTop="true"
         android:layout_centerVertical="true"
         android:gravity="right"
-        android:layout_marginTop="36dp"
         android:layout_toRightOf="@+id/tvImageSize"
         android:paddingRight="2dp"
-        android:spinnerMode="dropdown"
+        android:spinnerStyle="@android:style/Widget.Spinner.DropDown"
         android:entries="@array/imageSizeArr" />
 
     <TextView
@@ -57,7 +47,7 @@
         android:layout_centerVertical="true"
         android:gravity="right"
         android:paddingRight="2dp"
-        android:spinnerMode="dropdown"
+        android:spinnerStyle="@android:style/Widget.Spinner.DropDown"
         android:entries="@array/colorFilterArr" />
 
     <TextView
@@ -77,7 +67,7 @@
         android:layout_centerVertical="true"
         android:gravity="right"
         android:paddingRight="2dp"
-        android:spinnerMode="dropdown"
+        android:spinnerStyle="@android:style/Widget.Spinner.DropDown"
         android:entries="@array/imageTypeArr"/>
 
     <TextView
@@ -93,13 +83,26 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/sprImageType"
-        android:layout_toRightOf="@+id/tvSiteFilter" 
         android:layout_centerVertical="true"
-        android:textSize="13sp"
+        android:layout_toRightOf="@+id/tvSiteFilter"
+        android:ems="10"
+        android:hint="@string/et_site_hint"
         android:paddingRight="2dp"
-        android:ems="10" >
+        android:textSize="13sp" >
+
         <requestFocus />
     </EditText>
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvSiteFilter"
+        android:layout_marginTop="33dp"
+        android:layout_toRightOf="@+id/tvSiteFilter"
+        android:background="@drawable/custom_button"
+        android:textColor="@color/imgsearch_title_background"
+        android:text="@string/btn_save_label" />
 
     <Button
         android:id="@+id/btnReset"
@@ -107,18 +110,11 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/btnSave"
         android:layout_alignBottom="@+id/btnSave"
+        android:layout_marginLeft="36dp"
         android:layout_toRightOf="@+id/btnSave"
-         android:onClick="onFilterReset"
+        android:background="@drawable/custom_button"
+        android:textColor="@color/imgsearch_title_background"
         android:text="@string/btnReset" />
 
-    <Button
-        android:id="@+id/btnSave"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/etSiteFilter"
-        android:layout_marginTop="32dp"
-        android:layout_toRightOf="@+id/tvImageType"
-        android:onClick="onFilterSave"
-        android:text="@string/btn_save_label" />
-
 </RelativeLayout>
+

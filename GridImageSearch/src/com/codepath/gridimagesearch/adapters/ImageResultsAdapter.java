@@ -60,7 +60,6 @@ public class ImageResultsAdapter extends ArrayAdapter<ImageResult> {
         .placeholder(R.drawable.ic_thumb_placeholder)
         .into(viewHolder.ivImage);
 
-
         //return the completed view to be displayed
         return convertView;
     }
@@ -68,14 +67,8 @@ public class ImageResultsAdapter extends ArrayAdapter<ImageResult> {
 
     private double getPositionRatio(final int position) {
         double ratio = sPositionHeightRatios.get(position, 0.0);
-        // if not yet done generate and stash the columns height
-        // in our real world scenario this will be determined by
-        // some match based on the known height and width of the image
-        // and maybe a helpful way to get the column height!
-        if (ratio == 0) {
-            ratio = getImageHeightRatio(position);
-            sPositionHeightRatios.append(position, ratio);
-        }
+        ratio = getImageHeightRatio(position);
+        sPositionHeightRatios.append(position, ratio);
         return ratio;
     }
 
