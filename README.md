@@ -22,7 +22,7 @@ Time spent: 30 hours spent in total
  - [x] Use the ActionBar SearchView or custom layout as the query box instead of an EditText
  - [x] Use the StaggeredGridView to display improve the grid of image results
  - [x] User can share an image to their friends or email it to themselves
- - [ ] Replace Filter Settings Activity with a lightweight modal overlay
+ - [x] Replace Filter Settings Activity with a lightweight modal overlay
  - [ ] User can zoom or pan images displayed in full-screen detail view
 
 *Additional improvements:*
@@ -49,6 +49,10 @@ Time spent: 30 hours spent in total
 **Screenshot of image detail screen :**
 
 ![Screenshot](https://github.com/martasmith/GridImageSearch/blob/master/imgSearch_detail.png)
+
+**Screenshot of Filter settings dialog :**
+
+![Screenshot](https://github.com/martasmith/GridImageSearch/blob/master/imgSearch_dialog.png)
 
 **Demo:**
 
