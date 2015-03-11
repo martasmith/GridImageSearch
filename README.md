@@ -23,7 +23,7 @@ Time spent: 30 hours spent in total
  - [x] Use the StaggeredGridView to display improve the grid of image results
  - [x] User can share an image to their friends or email it to themselves
  - [x] Replace Filter Settings Activity with a lightweight modal overlay
- - [ ] User can zoom or pan images displayed in full-screen detail view
+ - [x] User can zoom or pan images displayed in full-screen detail view
 
 *Additional improvements:*
 
