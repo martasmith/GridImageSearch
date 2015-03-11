@@ -12,6 +12,8 @@ public class ImageResult implements Serializable {
     public String fullUrl;
     public double thumbWidth;
     public double thumbHeight;
+    public double fullWidth;
+    public double fullHeight;
     public String thumbUrl;
     public String title;
     public String visibleUrl;
@@ -39,6 +41,14 @@ public class ImageResult implements Serializable {
             if (json.optString("tbHeight") != null)
             {
                 this.thumbHeight = json.getDouble("tbHeight");
+            }
+            if (json.optString("width") != null)
+            {
+                this.fullWidth = json.getDouble("width");
+            }
+            if (json.optString("height") != null)
+            {
+                this.fullHeight = json.getDouble("height");
             }
             if (json.optString("contentNoFormatting") != null)
             {

@@ -1,3 +1,4 @@
+
 package com.codepath.gridimagesearch.activities;
 
 import java.io.File;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 
 import com.codepath.gridimagesearch.R;
 import com.codepath.gridimagesearch.models.ImageResult;
+import com.codepath.gridimagesearch.util.TouchImageView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -30,6 +32,8 @@ public class ImageDisplayActivity extends Activity {
 
     private ShareActionProvider miShareAction;
     private ActionBar actionBar;
+    private TouchImageView ivFullImage;
+    private TextView tvTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,18 +43,20 @@ public class ImageDisplayActivity extends Activity {
         actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        //pull out the fullUrl from the intent
+        // pull out the fullUrl from the intent
         ImageResult result = (ImageResult) getIntent().getSerializableExtra("result");
         // set activity title
         this.setTitle(result.visibleUrl);
-        //find the image view
-        ImageView ivFullImage = (ImageView) findViewById(R.id.ivFullImage);
-        TextView tvTitle = (TextView) findViewById(R.id.tvTitle);
+        // find the image view
+        ivFullImage = (TouchImageView) findViewById(R.id.ivFullImage);
+        tvTitle = (TextView) findViewById(R.id.tvTitle);
         tvTitle.setText(Html.fromHtml(result.title));
-        //load the image url into the image view using picasso
+
+        // load the image url into the image view using picasso
         Picasso.with(this)
         .load(result.fullUrl)
         .error(R.drawable.ic_thumb_placeholder)
+        .resize((int)result.fullWidth, (int)result.fullHeight)
         .into(ivFullImage, new Callback() {
             @Override
             public void onSuccess() {
@@ -61,11 +67,11 @@ public class ImageDisplayActivity extends Activity {
             @Override
             public void onError() {
                 // Display error to user
-                Toast.makeText(getApplicationContext(), "This image does not exist", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "This image does not exist",
+                        Toast.LENGTH_LONG).show();
             }
         });
     }
-
 
     // Gets the image URI and setup the associated share intent to hook into the provider
     public void setupShareIntent() {
@@ -88,7 +94,7 @@ public class ImageDisplayActivity extends Activity {
         // Extract Bitmap from ImageView drawable
         Drawable drawable = imageView.getDrawable();
         Bitmap bmp = null;
-        if (drawable instanceof BitmapDrawable){
+        if (drawable instanceof BitmapDrawable) {
             bmp = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
         } else {
             return null;
@@ -96,8 +102,9 @@ public class ImageDisplayActivity extends Activity {
         // Store image to default external storage directory
         Uri bmpUri = null;
         try {
-            File file =  new File(Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_DOWNLOADS), "share_image_" + System.currentTimeMillis() + ".png");
+            File file = new File(Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_DOWNLOADS), "share_image_" + System.currentTimeMillis()
+                    + ".png");
             file.getParentFile().mkdirs();
             FileOutputStream out = new FileOutputStream(file);
             bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
@@ -106,10 +113,8 @@ public class ImageDisplayActivity extends Activity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return bmpUri;
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -121,7 +126,6 @@ public class ImageDisplayActivity extends Activity {
 
         // Fetch and store ShareActionProvider
         miShareAction = (ShareActionProvider) item.getActionProvider();
-
 
         // Return true to display menu
         return true;
@@ -135,7 +139,7 @@ public class ImageDisplayActivity extends Activity {
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
-                //mimic back button functionality
+                // mimic back button functionality
                 super.onBackPressed();
                 return true;
             case R.id.action_share:

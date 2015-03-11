@@ -5,19 +5,15 @@
     android:background="@color/imgsearch_page_packground"
     tools:context="com.codepath.gridimagesearch.activities.ImageDisplayActivity" >
 
-       <ImageView
+       <com.codepath.gridimagesearch.util.TouchImageView
            android:id="@+id/ivFullImage"
            android:layout_width="match_parent"
-           android:layout_height="wrap_content"
+           android:layout_height="match_parent"
            android:layout_above="@+id/tvTitle"
            android:layout_alignParentLeft="true"
-           android:adjustViewBounds="true"
+           android:layout_alignParentRight="true"
+           android:layout_margin="5dp"
            android:contentDescription="@string/fullsize_image_label"
-           android:layout_marginTop="5dp"
-           android:gravity="center"
-		   android:layout_centerVertical="true"
-		   android:layout_centerHorizontal="true"
-           android:maxWidth="600dp"
            android:scaleType="fitCenter"
            android:src="@drawable/ic_launcher" />
 
@@ -25,12 +21,12 @@
            android:id="@+id/tvTitle"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
+           android:layout_alignParentBottom="true"
            android:layout_alignParentLeft="true"
-           android:layout_centerVertical="true"
-           android:layout_marginTop="5dp"
-           android:layout_marginLeft="5dp"
-           android:maxLines="3"
+           android:layout_marginBottom="30dp"
+           android:layout_margin="5dp"
            android:ellipsize="end"
+           android:maxLines="3"
            android:text="@string/image_title" />
 
 </RelativeLayout>
