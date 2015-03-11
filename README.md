@@ -20,10 +20,10 @@ Time spent: 30 hours spent in total
  - [x] Improve the user interface and experiment with image assets and/or styling and coloring
  - [x] Robust error handling, check if internet is available, handle error cases, network failures
  - [x] Use the ActionBar SearchView or custom layout as the query box instead of an EditText
- - [x] Use the StaggeredGridView to display improve the grid of image results
  - [x] User can share an image to their friends or email it to themselves
  - [x] Replace Filter Settings Activity with a lightweight modal overlay
- - [x] User can zoom or pan images displayed in full-screen detail view
+ - [x] Bonus: Use the StaggeredGridView to display improve the grid of image results
+ - [x] Bonus: User can zoom or pan images displayed in full-screen detail view
 
 *Additional improvements:*
 
