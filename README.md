@@ -29,7 +29,6 @@ Time spent: 30 hours spent in total
 
 - [x] Display placeholder for images while loading
 - [x] Display default image with error message if image detail does not load
-- [ ] Diplay loading indicator
 
 **Notes:**
 
@@ -56,4 +55,4 @@ Time spent: 30 hours spent in total
 
 **Demo:**
 
-![LICEcapimage](https://github.com/martasmith/GridImageSearch/blob/master/codepath_week2_v1.gif)
+![LICEcapimage](https://github.com/martasmith/GridImageSearch/blob/master/GridImageSearch_demo.gif)
