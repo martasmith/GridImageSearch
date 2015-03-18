@@ -1,3 +1,4 @@
+
 package com.codepath.gridimagesearch.fragments;
 
 import android.app.Activity;
@@ -13,6 +14,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.codepath.gridimagesearch.R;
+import com.codepath.gridimagesearch.models.FilterSetting;
 
 public class FilterSettingsFragment extends DialogFragment {
 
@@ -22,6 +24,7 @@ public class FilterSettingsFragment extends DialogFragment {
     private String imgSizeVal, colorFilterVal, imgTypeVal, siteFilterVal;
     int spinnerPos;
     private Button saveBtn, resetBtn;
+    private FilterSetting filters;
 
     private OnFilterSettingsFragmentListener fragmentListener;
 
@@ -30,16 +33,13 @@ public class FilterSettingsFragment extends DialogFragment {
     }
 
     public interface OnFilterSettingsFragmentListener {
-        public void OnFilterSet(String imgSize, String colorFilter, String imgType, String siteFilter);
+        public void OnFilterSet(FilterSetting filters);
     }
 
-    public static FilterSettingsFragment newInstance(String imgSizeVal, String colorFilterVal, String imgTypeVal, String siteFilterVal) {
+    public static FilterSettingsFragment newInstance(FilterSetting filters) {
         FilterSettingsFragment frag = new FilterSettingsFragment();
         Bundle args = new Bundle();
-        args.putString("imgSizeVal", imgSizeVal);
-        args.putString("colorFilterVal", colorFilterVal);
-        args.putString("imgTypeVal", imgTypeVal);
-        args.putString("siteFilterVal", siteFilterVal);
+        args.putSerializable("filters", filters);
         frag.setArguments(args);
         return frag;
     }
@@ -70,10 +70,21 @@ public class FilterSettingsFragment extends DialogFragment {
 
     private void getFragmentArgs() {
         // get data from arguments passed to the fragment
-        imgSizeVal = getArguments().getString("imgSizeVal","");
-        colorFilterVal = getArguments().getString("colorFilterVal","");
-        imgTypeVal = getArguments().getString("imgTypeVal","");
-        siteFilterVal = getArguments().getString("siteFilterVal","");
+        filters = (FilterSetting) getArguments().getSerializable("filters");
+        if (filters != null) {
+            if (filters.getImgSize() != null) {
+                imgSizeVal = filters.getImgSize();
+            }
+            if (filters.getImgColor() != null) {
+                colorFilterVal = filters.getImgColor();
+            }
+            if (filters.getImgType() != null) {
+                imgTypeVal = filters.getImgType();
+            }
+            if (filters.getSiteFilter() != null) {
+                siteFilterVal = filters.getSiteFilter();
+            }
+        }
     }
 
     private void setupViews(View view) {
@@ -103,7 +114,7 @@ public class FilterSettingsFragment extends DialogFragment {
         if (imgSizeVal != "") {
             sprImageSize.setSelection(aSprImageSize.getPosition(imgSizeVal));
         }
-        if (colorFilterVal!= "") {
+        if (colorFilterVal != "") {
             sprColorFilter.setSelection(aSprColorFilter.getPosition(colorFilterVal));
         }
         if (imgTypeVal != "") {
@@ -117,7 +128,7 @@ public class FilterSettingsFragment extends DialogFragment {
     @Override
     public void onAttach(Activity searchActivity) {
         super.onAttach(searchActivity);
-        //make sure SearchActivity implemented required interface
+        // make sure SearchActivity implemented required interface
         try {
             fragmentListener = (OnFilterSettingsFragmentListener) searchActivity;
         } catch (ClassCastException e) {
@@ -132,9 +143,10 @@ public class FilterSettingsFragment extends DialogFragment {
         colorFilterVal = sprColorFilter.getSelectedItem().toString();
         imgTypeVal = sprImageType.getSelectedItem().toString();
         siteFilterVal = tvSiteFilter.getText().toString();
-        //set values
+        // set values
         if (fragmentListener != null) {
-            fragmentListener.OnFilterSet(imgSizeVal, colorFilterVal, imgTypeVal, siteFilterVal);
+            filters = new FilterSetting(imgSizeVal, imgTypeVal, colorFilterVal, siteFilterVal);
+            fragmentListener.OnFilterSet(filters);
         }
     }
 
@@ -147,7 +159,7 @@ public class FilterSettingsFragment extends DialogFragment {
 
     public void onDetatch() {
         super.onDetach();
-        //reset fragment listener to null
+        // reset fragment listener to null
         fragmentListener = null;
     }
 

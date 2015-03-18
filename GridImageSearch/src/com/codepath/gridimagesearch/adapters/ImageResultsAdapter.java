@@ -1,3 +1,4 @@
+
 package com.codepath.gridimagesearch.adapters;
 
 import java.util.List;
@@ -38,7 +39,8 @@ public class ImageResultsAdapter extends ArrayAdapter<ImageResult> {
         ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_image_result, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_image_result,
+                    parent, false);
             viewHolder.ivImage = (DynamicHeightImageView) convertView.findViewById(R.id.ivImage);
             viewHolder.tvTitle = (DynamicHeightTextView) convertView.findViewById(R.id.tvTitle);
             convertView.setTag(viewHolder);
@@ -47,23 +49,22 @@ public class ImageResultsAdapter extends ArrayAdapter<ImageResult> {
         }
 
         // populate text
-        viewHolder.tvTitle.setText(Html.fromHtml(currentImage.title));
-        //clear out the image
+        viewHolder.tvTitle.setText(Html.fromHtml(currentImage.getTitle()));
+        // clear out the image
         viewHolder.ivImage.setImageResource(0);
 
         double positionHeight = getPositionRatio(position);
         viewHolder.ivImage.setHeightRatio(positionHeight);
 
-        //remotely download the image data in the background with Picasso
+        // remotely download the image data in the background with Picasso
         Picasso.with(getContext())
-        .load(currentImage.thumbUrl)
+        .load(currentImage.getThumbUrl())
         .placeholder(R.drawable.ic_thumb_placeholder)
         .into(viewHolder.ivImage);
 
-        //return the completed view to be displayed
+        // return the completed view to be displayed
         return convertView;
     }
-
 
     private double getPositionRatio(final int position) {
         double ratio = sPositionHeightRatios.get(position, 0.0);
@@ -74,7 +75,7 @@ public class ImageResultsAdapter extends ArrayAdapter<ImageResult> {
 
     private double getImageHeightRatio(final int position) {
         ImageResult currentImage = getItem(position);
-        return currentImage.thumbHeight / currentImage.thumbWidth;
+        return currentImage.getThumbHeight() / currentImage.getThumbWidth();
     }
 
 }

@@ -16,7 +16,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +33,7 @@ import com.codepath.gridimagesearch.adapters.EndlessScrollListener;
 import com.codepath.gridimagesearch.adapters.ImageResultsAdapter;
 import com.codepath.gridimagesearch.fragments.FilterSettingsFragment;
 import com.codepath.gridimagesearch.fragments.FilterSettingsFragment.OnFilterSettingsFragmentListener;
+import com.codepath.gridimagesearch.models.FilterSetting;
 import com.codepath.gridimagesearch.models.ImageResult;
 import com.etsy.android.grid.StaggeredGridView;
 import com.loopj.android.http.AsyncHttpClient;
@@ -43,9 +43,11 @@ public class SearchActivity extends FragmentActivity implements OnFilterSettings
     // private GridView gvResults;
     private ArrayList<ImageResult> imageResults;
     private ImageResultsAdapter aImageResults;
-    private final int REQUEST_CODE = 10;
-    private String searchFilters, imageSizeValue, colorFilterValue, imageTypeValue,
-    siteFilterValue, searchStr;
+    private FilterSetting filterSetting;
+    // private final int REQUEST_CODE = 10;
+    // private String searchFilters, imageSizeValue, colorFilterValue,
+    // imageTypeValue,siteFilterValue;
+    private String searchStr, filterStr;
     private SearchView searchView;
     private StaggeredGridView gvResults;
     private RelativeLayout rlSplashScreen;
@@ -122,14 +124,14 @@ public class SearchActivity extends FragmentActivity implements OnFilterSettings
 
         AsyncHttpClient client = new AsyncHttpClient();
 
-        searchFilters = getSearchFilters();
+        filterStr = getSearchFilters();
 
         String searchUrl = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" +
                 searchStr +
                 "&rsz=8" +
                 "&start=" + offset +
-                searchFilters;
-        Log.d("martas", "query: " + searchUrl);
+                filterStr;
+        //Log.d("martas", "query: " + searchUrl);
 
         client.get(searchUrl, new JsonHttpResponseHandler() {
 
@@ -174,41 +176,6 @@ public class SearchActivity extends FragmentActivity implements OnFilterSettings
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
-            // clear out filters to be regenerated
-            searchFilters = "";
-            // check if intent results are passed back and collect data
-            // Retrieve data Strings from Intent
-            Bundle extras = data.getExtras();
-            if (extras != null) {
-                if (extras.containsKey("imageSizeValue")
-                        && (extras.getString("imageSizeValue") != "")) {
-                    imageSizeValue = extras.getString("imageSizeValue");
-                    searchFilters += "&imgsz=" + imageSizeValue;
-                }
-                if (extras.containsKey("colorFilterValue")
-                        && (extras.getString("colorFilterValue") != "")) {
-                    colorFilterValue = extras.getString("colorFilterValue");
-                    searchFilters += "&imgcolor=" + colorFilterValue;
-                }
-                if (extras.containsKey("imageTypeValue")
-                        && (extras.getString("imageTypeValue") != "")) {
-                    imageTypeValue = extras.getString("imageTypeValue");
-                    searchFilters += "&imgtype=" + imageTypeValue;
-                }
-                if (extras.containsKey("siteFilterValue")
-                        && (extras.getString("sizeFilterValue") != "")) {
-                    siteFilterValue = extras.getString("siteFilterValue");
-                    searchFilters += "&as_sitesearch=" + siteFilterValue;
-                }
-            }
-            doImageSearch();
-        }
-    }
-
     public void doImageSearch() {
         aImageResults.clear();
         if (rlSplashScreen.getVisibility() == View.VISIBLE) {
@@ -228,26 +195,27 @@ public class SearchActivity extends FragmentActivity implements OnFilterSettings
     }
 
     private String getSearchFilters() {
-        searchFilters = "";
-        if (!TextUtils.isEmpty(imageSizeValue)) {
-            searchFilters += "&imgsz=" + imageSizeValue;
+        filterStr = "";
+        if (filterSetting != null) {
+            if (filterSetting.getImgSize() != null) {
+                filterStr += "&imgsz=" + filterSetting.getImgSize();
+            }
+            if (filterSetting.getImgColor() != null) {
+                filterStr += "&imgcolor=" + filterSetting.getImgColor();
+            }
+            if (filterSetting.getImgType() != null) {
+                filterStr += "&imgtype=" + filterSetting.getImgType();
+            }
+            if (filterSetting.getSiteFilter() != null) {
+                filterStr += "&as_sitesearch=" + filterSetting.getSiteFilter();
+            }
         }
-        if (!TextUtils.isEmpty(colorFilterValue)) {
-            searchFilters += "&imgcolor=" + colorFilterValue;
-        }
-        if (!TextUtils.isEmpty(imageTypeValue)) {
-            searchFilters += "&imgtype=" + imageTypeValue;
-        }
-        if (!TextUtils.isEmpty(siteFilterValue)) {
-            searchFilters += "&as_sitesearch=" + siteFilterValue;
-        }
-        return searchFilters;
+        return filterStr;
     }
 
     private void showFilterSettings() {
         FragmentManager fm = getFragmentManager();
-        FilterSettingsFragment fragment = FilterSettingsFragment.newInstance(imageSizeValue,
-                colorFilterValue, imageTypeValue, siteFilterValue);
+        FilterSettingsFragment fragment = FilterSettingsFragment.newInstance(filterSetting);
         fragment.show(fm, "Filter_Settings_fragment");
     }
 
@@ -256,11 +224,8 @@ public class SearchActivity extends FragmentActivity implements OnFilterSettings
     }
 
     @Override
-    public void OnFilterSet(String imgSize, String colorFilter, String imgType, String siteFilter) {
-        imageSizeValue = imgSize;
-        colorFilterValue = colorFilter;
-        imageTypeValue = imgType;
-        siteFilterValue = siteFilter;
+    public void OnFilterSet(FilterSetting filters) {
+        filterSetting = filters;
         doImageSearch();
     }
 

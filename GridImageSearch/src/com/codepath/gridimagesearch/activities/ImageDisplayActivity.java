@@ -17,6 +17,7 @@ import android.os.Environment;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
@@ -45,22 +46,25 @@ public class ImageDisplayActivity extends Activity {
 
         // pull out the fullUrl from the intent
         ImageResult result = (ImageResult) getIntent().getSerializableExtra("result");
+
         // set activity title
-        this.setTitle(result.visibleUrl);
+        this.setTitle(result.getVisibleUrl());
         // find the image view
         ivFullImage = (TouchImageView) findViewById(R.id.ivFullImage);
         tvTitle = (TextView) findViewById(R.id.tvTitle);
-        tvTitle.setText(Html.fromHtml(result.title));
+        tvTitle.setText(Html.fromHtml(result.getTitle()));
+        tvTitle.setVisibility(View.INVISIBLE);
 
         // load the image url into the image view using picasso
         Picasso.with(this)
-        .load(result.fullUrl)
+        .load(result.getFullUrl())
         .error(R.drawable.ic_thumb_placeholder)
-        .resize((int)result.fullWidth, (int)result.fullHeight)
+        .resize((int) result.getFullWidth(), (int) result.getFullHeight())
         .into(ivFullImage, new Callback() {
             @Override
             public void onSuccess() {
                 // Setup share intent now that image has loaded
+                tvTitle.setVisibility(View.VISIBLE);
                 setupShareIntent();
             }
 
@@ -68,8 +72,9 @@ public class ImageDisplayActivity extends Activity {
             public void onError() {
                 // Display error to user
                 Toast.makeText(getApplicationContext(), "This image does not exist",
-                        Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_SHORT).show();
             }
+
         });
     }
 
