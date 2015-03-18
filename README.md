@@ -37,6 +37,10 @@ Time spent: 30 hours spent in total
 * Most of my time was spent working on the plugging away on all the required features and improving the UI. Nothing was really difficult, just alltogether it took a long time to complete
 * The UI could still use some work, like making better scaling images in the gridview
 
+**Demo:**
+
+![LICEcapimage](https://github.com/martasmith/GridImageSearch/blob/master/GridImageSearch_demo.gif)
+
 **Screenshot of launch display screen :**
 
 ![Screenshot](https://github.com/martasmith/GridImageSearch/blob/master/imgSearch_home.png)
@@ -53,6 +57,3 @@ Time spent: 30 hours spent in total
 
 ![Screenshot](https://github.com/martasmith/GridImageSearch/blob/master/imgSearch_dialog.png)
 
-**Demo:**
-
-![LICEcapimage](https://github.com/martasmith/GridImageSearch/blob/master/GridImageSearch_demo.gif)
